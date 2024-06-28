@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Home from "../pages/Home";
 import Services from "../pages/Services";
-import PasswordChange from "../pages/Patients/PasswordChange";
+import PasswordChange from "../pages/PasswordChange";
 import Login from "../pages/Login";
 import Contact from "../pages/Contact";
 import Doctors from "../pages/Doctors/Doctors";
@@ -56,14 +56,7 @@ const Routers = () => {
         }
       />
       <Route path="/login" element={<Login />} />
-      <Route
-        path="/passwordchange"
-        element={
-          <ProtectedRoute role="patient">
-            <PasswordChange />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/passwordchange" element={<PasswordChange />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/services" element={<Services />} />
       <Route
