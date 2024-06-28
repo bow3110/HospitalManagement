@@ -28,8 +28,16 @@ exports.getMyInfo = async (req, res) => {
       if (myInfoRows.length === 0) {
         return res.status(404).json({ message: "User info not found" });
       }
+
+      const [departmentRows] = await pool.query(
+        "SELECT name FROM department WHERE id = ?",
+        [myInfoRows[0].department_id]
+      );
+
+      myInfoRows[0].department_name = departmentRows[0].name;
       res.status(200).json(myInfoRows[0]);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Server error" });
     }
   } else {
@@ -40,12 +48,41 @@ exports.getMyInfo = async (req, res) => {
 exports.updateMyInfo = async (req, res) => {
   const userId = req.user.id;
   const userRole = req.user.role;
-  const { phone_number, city, address, health_card } = req.body;
+
   if (userRole == "patient") {
+    const { phone_number, city, address, health_card } = req.body;
     try {
       const [updateInfoRows] = await pool.query(
         "UPDATE patient SET phone_number = ?, city = ?, address = ?, health_card = ? WHERE patient_id = ?",
         [phone_number, city, address, health_card, userId]
+      );
+
+      if (updateInfoRows.affectedRows === 0) {
+        return res.status(404).json({ message: "User info not found" });
+      }
+      res.status(200).json({ message: "User info updated" });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  } else if (userRole == "doctor") {
+    const { phone_number, department_name, graduation_year } = req.body;
+    console.log(phone_number, department_name, graduation_year);
+    try {
+      const [departmentRows] = await pool.query(
+        "SELECT id FROM department WHERE name = ?",
+        [department_name]
+      );
+
+      if (departmentRows.length === 0) {
+        return res.status(404).json({ message: "Department not found" });
+      }
+
+      department_id = departmentRows[0].id;
+
+      const [updateInfoRows] = await pool.query(
+        "UPDATE doctor SET phone_number = ?, department_id = ?, graduation_year = ? WHERE doctorid = ?",
+        [phone_number, department_id, graduation_year, userId]
       );
 
       if (updateInfoRows.affectedRows === 0) {

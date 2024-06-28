@@ -39,7 +39,7 @@ const Home = () => {
                 </p>
 
                 <Link to="/login">
-                  <button className="btn">Request an Appointment</button>
+                  <button className="btn">Đặt lịch hẹn ngay</button>
                 </Link>
               </div>
               {/* hero counter */}

@@ -8,19 +8,15 @@ import { useAuth } from "../../context/AuthContext";
 const navLinks = [
   {
     path: "/home",
-    display: "Home",
+    display: "Trang chủ",
   },
   {
-    path: "/doctors",
-    display: "Find a Doctor",
+    path: "/info",
+    display: "Thông tin cá nhân",
   },
   {
-    path: "/services",
-    display: "Services",
-  },
-  {
-    path: "/contact",
-    display: "Contact",
+    path: "/calendar",
+    display: "Lịch hẹn của tôi",
   },
 ];
 
@@ -98,7 +94,7 @@ const Header = () => {
                     ) : user.role === "doctor" ? (
                       <>
                         <Link
-                          to="/doctor/dashboard"
+                          to="/patients"
                           className="block px-2 py-1 text-sm text-gray-800 hover:bg-gray-100"
                           onClick={() => setShowDropdown(false)}
                         >

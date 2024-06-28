@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
-const DoctorInfoForm = () => {
+const PersonalInfoForm = () => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -8,18 +11,78 @@ const DoctorInfoForm = () => {
     phone: "",
     birthday: "",
     gender: "male",
-    city: "",
-    address: "",
-    graduatedYear: "",
-    major: "",
+    department: "",
+    graduation_year: "",
   });
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/user/myinfo", {
+          credentials: "include",
+        });
+        const data = await response.json();
+        if (response.ok) {
+          console.log("Fetched patient info:", data);
+          setFormData({
+            username: data.username || "",
+            name: data.fullname || "",
+            phone: data.phone_number || "",
+            birthday: data.birthday
+              ? new Date(data.birthday).toISOString().split("T")[0]
+              : "",
+            gender: data.gender || "male",
+            city: data.city || "",
+            department: data.department_name || "",
+            graduation_year: data.graduation_year || "",
+          });
+        } else {
+          console.error("Error fetching patient info:", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching patient info:", error);
+      }
+    };
+
+    fetchUserInfo();
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value !== undefined ? value : "",
+    }));
+  };
+
+  const handleUpdate = async () => {
+    try {
+      console.log("Updating patient info with data:", formData);
+
+      const response = await fetch("http://localhost:5000/api/user/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          phone_number: formData.phone,
+          department_name: formData.department,
+          graduation_year: formData.graduation_year,
+        }),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+      } else {
+        alert(result.message);
+        console.error("Error updating patient info:", result);
+      }
+    } catch (error) {
+      alert("An error occurred. Please try again later.");
+      console.error("Error updating patient info:", error);
+    }
   };
 
   return (
@@ -40,6 +103,7 @@ const DoctorInfoForm = () => {
               onChange={handleChange}
               className="mt-1 p-2 border rounded-lg w-full"
               placeholder="Placeholder"
+              disabled
             />
           </div>
           <div>
@@ -53,11 +117,14 @@ const DoctorInfoForm = () => {
                 value={formData.password}
                 onChange={handleChange}
                 className="mt-1 p-2 border rounded-lg w-full"
-                placeholder="Placeholder"
+                placeholder="******"
+                disabled
               />
-              <button className="ml-2 p-2 bg-black text-white rounded-lg">
-                Đổi mật khẩu
-              </button>
+              <Link to="/passwordchange">
+                <button className="ml-2 p-2 bg-black text-white rounded-lg">
+                  Đổi mật khẩu
+                </button>
+              </Link>
             </div>
           </div>
           <div className="col-span-2">
@@ -71,6 +138,7 @@ const DoctorInfoForm = () => {
               onChange={handleChange}
               className="mt-1 p-2 border rounded-lg w-full"
               placeholder="Placeholder"
+              disabled
             />
           </div>
           <div>
@@ -88,12 +156,12 @@ const DoctorInfoForm = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Tỉnh/ Thành phố
+              Chuyên ngành
             </label>
             <input
               type="text"
-              name="city"
-              value={formData.city}
+              name="department"
+              value={formData.department}
               onChange={handleChange}
               className="mt-1 p-2 border rounded-lg w-full"
               placeholder="Placeholder"
@@ -110,19 +178,7 @@ const DoctorInfoForm = () => {
               onChange={handleChange}
               className="mt-1 p-2 border rounded-lg w-full"
               placeholder="Placeholder"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Địa chỉ
-            </label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              className="mt-1 p-2 border rounded-lg w-full"
-              placeholder="Placeholder"
+              disabled
             />
           </div>
           <div>
@@ -131,21 +187,8 @@ const DoctorInfoForm = () => {
             </label>
             <input
               type="text"
-              name=" graduatedYear"
-              value={formData.graduatedYear}
-              onChange={handleChange}
-              className="mt-1 p-2 border rounded-lg w-full"
-              placeholder="Placeholder"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Chuyên ngành
-            </label>
-            <input
-              type="text"
-              name=" major"
-              value={formData.major}
+              name="graduation_year"
+              value={formData.graduation_year}
               onChange={handleChange}
               className="mt-1 p-2 border rounded-lg w-full"
               placeholder="Placeholder"
@@ -164,6 +207,7 @@ const DoctorInfoForm = () => {
                   checked={formData.gender === "male"}
                   onChange={handleChange}
                   className="form-radio"
+                  disabled
                 />
                 <span className="ml-2">Nam</span>
               </label>
@@ -175,6 +219,7 @@ const DoctorInfoForm = () => {
                   checked={formData.gender === "female"}
                   onChange={handleChange}
                   className="form-radio"
+                  disabled
                 />
                 <span className="ml-2">Nữ</span>
               </label>
@@ -182,7 +227,10 @@ const DoctorInfoForm = () => {
           </div>
         </div>
         <div className="mt-6 text-center">
-          <button className="px-6 py-2 bg-black text-white rounded-lg">
+          <button
+            onClick={handleUpdate}
+            className="px-6 py-2 bg-black text-white rounded-lg"
+          >
             Cập nhật
           </button>
         </div>
@@ -191,4 +239,4 @@ const DoctorInfoForm = () => {
   );
 };
 
-export default DoctorInfoForm;
+export default PersonalInfoForm;
