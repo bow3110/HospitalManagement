@@ -5,27 +5,26 @@ import { BiMenu } from "react-icons/bi";
 import avatarIcon from "../../assets/images/avatar-icon.png";
 import { useAuth } from "../../context/AuthContext";
 
-const navLinks = [
-  {
-    path: "/home",
-    display: "Trang chủ",
-  },
-  {
-    path: "/info",
-    display: "Thông tin cá nhân",
-  },
-  {
-    path: "/calendar",
-    display: "Lịch hẹn của tôi",
-  },
-];
-
 const Header = () => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
   const { user, logout } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const navLinks = [
+    {
+      path: "/home",
+      display: "Trang chủ",
+    },
+    {
+      path: user.role === "patient" ? "/patient/info" : "/doctor/info",
+      display: "Thông tin cá nhân",
+    },
+    {
+      path: "/calendar",
+      display: "Lịch hẹn của tôi",
+    },
+  ];
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
   const toggleDropdown = () => setShowDropdown(!showDropdown);
 
