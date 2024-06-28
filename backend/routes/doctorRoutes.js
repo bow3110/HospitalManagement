@@ -1,5 +1,8 @@
 const express = require("express");
-const { updatePatientInfo } = require("../controllers/doctorController");
+const {
+  updatePatientInfo,
+  makeSchedule,
+} = require("../controllers/doctorController");
 const { verifyToken, authorizeRoles } = require("../middleware/auth");
 
 const router = express.Router();
@@ -17,5 +20,12 @@ const router = express.Router();
 //   authorizeRoles("patient"),
 //   updatePatientInfo
 // );
+
+router.post(
+  "/makeSchedule",
+  verifyToken,
+  authorizeRoles("doctor"),
+  makeSchedule
+);
 
 module.exports = router;

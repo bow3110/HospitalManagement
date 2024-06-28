@@ -16,14 +16,6 @@ const Header = () => {
       path: "/home",
       display: "Trang chủ",
     },
-    {
-      path: user.role === "patient" ? "/patient/info" : "/doctor/info",
-      display: "Thông tin cá nhân",
-    },
-    {
-      path: "/calendar",
-      display: "Lịch hẹn của tôi",
-    },
   ];
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
   const toggleDropdown = () => setShowDropdown(!showDropdown);
@@ -98,6 +90,20 @@ const Header = () => {
                           onClick={() => setShowDropdown(false)}
                         >
                           Quản lý bệnh nhân
+                        </Link>
+                        <Link
+                          to="/doctor/info"
+                          className="block px-2 py-1 text-sm text-gray-800 hover:bg-gray-100"
+                          onClick={() => setShowDropdown(false)}
+                        >
+                          Thông tin cá nhân
+                        </Link>
+                        <Link
+                          to="/doctor/takelist"
+                          className="block px-2 py-1 text-sm text-gray-800 hover:bg-gray-100"
+                          onClick={() => setShowDropdown(false)}
+                        >
+                          Lịch hẹn của tôi
                         </Link>
                       </>
                     ) : null}

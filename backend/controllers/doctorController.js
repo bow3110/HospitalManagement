@@ -1,56 +1,27 @@
-const express = require("express");
-const mysql = require("mysql");
-const cors = require("cors");
+const pool = require("../config/database");
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+exports.makeSchedule = async (req, res) => {
+  const userId = req.user.id;
+  const userRole = req.user.role;
+  if (userRole !== "doctor") {
+    return res.status(403).json({ message: "Forbidden" });
+  }
 
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "1234",
-  database: "hospital_db",
-});
+  const { patientId, date, time } = req.body;
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log("Connected to MySQL");
-});
+  try {
+    // insert appointment into database
+    const [insertAppointmentRows] = await pool.query(
+      "INSERT INTO schedule (patient_id, doctor_id, date, time, status) VALUES (?, ?, ?, ?, ?)",
+      [patientId, userId, date, time, "unapproved"]
+    );
 
-app.get("/doctor/:id", (req, res) => {
-  const doctorId = req.params.id;
-  db.query(
-    "SELECT * FROM doctor WHERE doctorid = ?",
-    [doctorId],
-    (err, result) => {
-      if (err) throw err;
-      res.send(result[0]);
+    if (insertAppointmentRows.affectedRows === 0) {
+      return res.status(500).json({ message: "Failed to make appointment" });
     }
-  );
-});
 
-app.put("/doctor/:id", (req, res) => {
-  const doctorId = req.params.id;
-  const doctorData = req.body;
-  db.query(
-    "UPDATE doctor SET fullname = ?, birthday = ?, gender = ?, graduation_year = ?, department_id = ?, phone_number = ? WHERE doctorid = ?",
-    [
-      doctorData.fullname,
-      doctorData.birthday,
-      doctorData.gender,
-      doctorData.graduation_year,
-      doctorData.department_id,
-      doctorData.phone_number,
-      doctorId,
-    ],
-    (err, result) => {
-      if (err) throw err;
-      res.send({ message: "Doctor updated successfully" });
-    }
-  );
-});
-
-app.listen(3001, () => {
-  console.log("Server running on port 3001");
-});
+    res.status(201).json({ message: "Appointment created" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};

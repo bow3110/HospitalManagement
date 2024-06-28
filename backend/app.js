@@ -6,6 +6,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const patientRoutes = require("./routes/patientRoutes");
 const userRoutes = require("./routes/userRoutes");
+const doctorRoutes = require("./routes/doctorRoutes");
 const { verifyToken, authorizeRoles } = require("./middleware/auth");
 
 const app = express();
@@ -29,18 +30,14 @@ app.use(
 );
 
 app.use("/api/auth", authRoutes);
-app.use("/api/patients", patientRoutes);
+app.use("/api/patient", patientRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/doctor", doctorRoutes);
 
 // Protect routes
 app.use("/api/doctors", verifyToken, authorizeRoles("doctor"));
-app.use("/api/patients", verifyToken, authorizeRoles("patient", "doctor"));
+app.use("/api/patient", verifyToken, authorizeRoles("doctor"));
 app.use("/api/user", verifyToken);
-// app.use(
-//   "/api/passwordchange",
-//   verifyToken,
-//   authorizeRoles("patient", "doctor")
-// );
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
