@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const AppointmentForm = () => {
   const [form, setForm] = useState({
-    doctorName: "",
+    patientID: "",
     patientName: "",
     appointmentDate: "",
     appointmentTime: "",
@@ -26,7 +26,7 @@ const AppointmentForm = () => {
       >
         <h1 className="text-2xl font-bold mb-6 text-center">HẸN LỊCH KHÁM</h1>
         <div className="mb-4">
-          <label className="block text-gray-700">Tên Bác sĩ</label>
+          <label className="block text-gray-700">ID Bệnh nhân</label>
           <input
             type="text"
             name="doctorName"

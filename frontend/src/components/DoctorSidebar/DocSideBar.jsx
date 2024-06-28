@@ -6,6 +6,18 @@ const DoctorSidebar = () => {
   const doctorSidebarItems = [
     { srcImg: "/home.svg", alt: "home", text: "Trang chủ", link: "/" },
     {
+      srcImg: "/calendar.svg",
+      alt: "calendar",
+      text: "Lịch hẹn của tôi",
+      link: "/doctor/takelist",
+    },
+    {
+      srcImg: "/vite.svg",
+      alt: "info",
+      text: "Thông tin cá nhân",
+      link: "/doctor/info",
+    },
+    {
       srcImg: "/search.svg",
       alt: "search",
       text: "Tìm kiếm bệnh nhân",

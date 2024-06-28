@@ -10,7 +10,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Layout = () => {
   const location = useLocation();
-  const { role } = useAuth();
+  const { user } = useAuth();
 
   const showSidebar =
     location.pathname.startsWith("/patients") ||
@@ -23,7 +23,7 @@ const Layout = () => {
     <>
       {showSidebar ? (
         <div className="flex">
-          {role === "doctor" ? <DoctorSidebar /> : <PatientSidebar />}
+          {user.role === "doctor" ? <DoctorSidebar /> : <PatientSidebar />}
           <main className="ml-64 flex-1 p-4">
             <Routers />
           </main>
