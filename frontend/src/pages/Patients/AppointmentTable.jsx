@@ -3,39 +3,55 @@ import React from "react";
 const appointments = [
   {
     id: "FIG-123",
-    task: "Task 1",
-    project: "Project 1",
-    priority: "High",
+    name: "Bác sĩ A",
     date: "Dec 5",
+    time: "10:00 AM",
+    status: "Placeholder",
+    accept: true,
+    cancel: false,
   },
   {
-    id: "FIG-123",
-    task: "Task 2",
-    project: "Acme GTM",
-    priority: "Low",
+    id: "FIG-122",
+    name: "Bác sĩ B",
     date: "Dec 5",
+    time: "11:00 AM",
+    status: "Placeholder",
+    accept: true,
+    cancel: false,
   },
   {
     id: "FIG-120",
-    task: "Write blog post for demo day",
-    project: "Acme GTM",
-    priority: "High",
+    name: "Bác sĩ C",
     date: "Dec 5",
+    time: "12:00 PM",
+    status: "Placeholder",
+    accept: true,
+    cancel: false,
   },
 ];
 
 const AppointmentsTable = () => {
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 max-w-screen-lg">
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white">
           <thead>
             <tr>
-              <th className="py-2 px-4 border-b border-gray-300">ID</th>
-              <th className="py-2 px-4 border-b border-gray-300">Task</th>
-              <th className="py-2 px-4 border-b border-gray-300">Project</th>
-              <th className="py-2 px-4 border-b border-gray-300">Priority</th>
-              <th className="py-2 px-4 border-b border-gray-300">Date</th>
+              <th className="py-2 px-4 border-b border-gray-300 text-left">
+                ID
+              </th>
+              <th className="py-2 px-4 border-b border-gray-300 text-left">
+                Tên bác sĩ
+              </th>
+              <th className="py-2 px-4 border-b border-gray-300 text-left">
+                Ngày
+              </th>
+              <th className="py-2 px-4 border-b border-gray-300 text-left">
+                Giờ
+              </th>
+              <th className="py-2 px-4 border-b border-gray-300 text-left">
+                Xác nhận
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -45,16 +61,36 @@ const AppointmentsTable = () => {
                   {appointment.id}
                 </td>
                 <td className="py-2 px-4 border-b border-gray-300">
-                  {appointment.task}
-                </td>
-                <td className="py-2 px-4 border-b border-gray-300">
-                  {appointment.project}
-                </td>
-                <td className="py-2 px-4 border-b border-gray-300">
-                  {appointment.priority}
+                  {appointment.name}
                 </td>
                 <td className="py-2 px-4 border-b border-gray-300">
                   {appointment.date}
+                </td>
+                <td className="py-2 px-4 border-b border-gray-300">
+                  {appointment.time}
+                </td>
+                <td className="py-2 px-4 border-b border-gray-300">
+                  {appointment.status}
+                </td>
+                <td className="py-2 px-4 border-b border-gray-300">
+                  <button
+                    className={`p-2 rounded ${
+                      appointment.cancel
+                        ? "bg-red-500 text-white"
+                        : "bg-gray-300"
+                    }`}
+                  >
+                    {appointment.cancel ? "Cancel" : "Accept"}
+                  </button>
+                  <button
+                    className={`p-2 rounded ${
+                      appointment.accept
+                        ? "bg-red-500 text-white"
+                        : "bg-gray-300"
+                    }`}
+                  >
+                    {appointment.accept ? "Cancel" : "Accept"}
+                  </button>
                 </td>
               </tr>
             ))}
