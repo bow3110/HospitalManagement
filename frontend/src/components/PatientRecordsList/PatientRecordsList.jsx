@@ -5,6 +5,7 @@ const formatDate = (dateString) => {
   const options = { year: "numeric", month: "long", day: "numeric" };
   return new Date(dateString).toLocaleDateString("vi-VN", options);
 };
+
 const PatientRecordsList = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -12,38 +13,62 @@ const PatientRecordsList = () => {
   const navigate = useNavigate();
   const [patient, setPatient] = useState(null);
   const [records, setRecords] = useState([]);
-  const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [doctorNames, setDoctorNames] = useState({});
 
   useEffect(() => {
     const fetchPatientRecords = async () => {
       try {
-        const patient = await fetch(
+        const patientResponse = await fetch(
           `http://localhost:5000/api/patient/data?patientID=${patientId}`,
           {
             credentials: "include",
           }
         );
-        if (!patient.ok) {
-          const errorData = await patient.json();
+
+        if (!patientResponse.ok) {
+          const errorData = await patientResponse.json();
           console.error("Error fetching patient info:", errorData.message);
           return;
         }
-        const patientData = await patient.json();
+
+        const patientData = await patientResponse.json();
         setPatient(patientData);
 
-        const response = await fetch(
+        const recordsResponse = await fetch(
           `http://localhost:5000/api/patient/records?patientId=${patientId}`,
           {
             credentials: "include",
           }
         );
-        const data = await response.json();
-        if (response.ok) {
-          setRecords(data);
+
+        const recordsData = await recordsResponse.json();
+        if (recordsResponse.ok) {
+          setRecords(recordsData);
+          const doctorIds = recordsData.map((record) => record.doctor_id);
+          const uniqueDoctorIds = [...new Set(doctorIds)];
+          console.log(uniqueDoctorIds);
+          const doctorPromises = uniqueDoctorIds.map((doctorId) =>
+            fetch(
+              `http://localhost:5000/api/doctor/data?doctorId=${doctorId}`,
+              {
+                credentials: "include",
+              }
+            ).then((res) => res.json())
+          );
+
+          const doctorsData = await Promise.all(doctorPromises);
+          console.log(`Doctors data:`, doctorsData);
+
+          const doctorNamesMap = {};
+          doctorsData.forEach((doctor) => {
+            doctorNamesMap[doctor.doctorid] = doctor.fullname;
+          });
+          setDoctorNames(doctorNamesMap);
+          console.log(doctorNamesMap);
         } else {
-          setError(data.message);
+          setError(recordsData.message);
         }
       } catch (error) {
         console.log(error);
@@ -101,7 +126,9 @@ const PatientRecordsList = () => {
               <div className="text-sm">
                 Thời gian điều trị: {formatDate(record.date)}
               </div>
-              <div className="text-sm">Bác sĩ điều trị: {record.doctor_id}</div>
+              <div className="text-sm">
+                Bác sĩ điều trị: {doctorNames[record.doctor_id]}
+              </div>
               <div className="text-sm">Tóm tắt: {record.summary}</div>
             </div>
             <div className="flex space-x-2">
