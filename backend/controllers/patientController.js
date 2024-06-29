@@ -32,6 +32,7 @@ exports.getPatientRecords = async (req, res) => {
       "SELECT * FROM record WHERE patient_id = ?",
       [patientId]
     );
+    console.log(rows[0]);
     res.status(200).json(rows);
   } catch (error) {
     res.status(500).json({ message: "Server error" });

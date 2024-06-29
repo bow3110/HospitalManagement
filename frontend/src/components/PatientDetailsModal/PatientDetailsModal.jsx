@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 const PatientDetailsModal = ({ patientId, onClose }) => {
   const [patient, setPatient] = useState(null);
 
-  // Function to format date
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString("vi-VN", options);

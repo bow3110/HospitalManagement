@@ -1,31 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+const formatDate = (dateString) => {
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return new Date(dateString).toLocaleDateString("vi-VN", options);
+};
 const PatientRecordsList = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const patientId = queryParams.get("patientId");
   const navigate = useNavigate();
   const [patient, setPatient] = useState(null);
+  const [records, setRecords] = useState([]);
+  const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPatientRecords = async () => {
       try {
+        const patient = await fetch(
+          `http://localhost:5000/api/patient/data?patientID=${patientId}`,
+          {
+            credentials: "include",
+          }
+        );
+        if (!patient.ok) {
+          const errorData = await patient.json();
+          console.error("Error fetching patient info:", errorData.message);
+          return;
+        }
+        const patientData = await patient.json();
+        setPatient(patientData);
+
         const response = await fetch(
-          `http://localhost:5000/api/patients/records?patientId=${patientId}`,
+          `http://localhost:5000/api/patient/records?patientId=${patientId}`,
           {
             credentials: "include",
           }
         );
         const data = await response.json();
         if (response.ok) {
-          setPatient(data);
+          setRecords(data);
         } else {
           setError(data.message);
         }
       } catch (error) {
+        console.log(error);
         setError("An error occurred while fetching patient records");
       } finally {
         setLoading(false);
@@ -58,7 +79,7 @@ const PatientRecordsList = () => {
         </button>
       </div>
       <h2 className="text-2xl font-bold mb-4">
-        Hồ Sơ Bệnh Án - {patient.name}
+        Hồ Sơ Bệnh Án - {patient.fullname}
       </h2>
       <div className="mb-4">
         <input
@@ -68,15 +89,20 @@ const PatientRecordsList = () => {
         />
       </div>
       <div className="bg-white shadow-md rounded">
-        {patient.records.map((record) => (
+        {records.map((record) => (
           <div
             key={record.id}
             className="flex justify-between items-center p-4 border-b"
           >
             <div className="flex-1">
-              <div className="text-lg font-bold">{record.id}</div>
-              <div className="text-sm">{record.date}</div>
-              <div className="text-sm">{record.summary}</div>
+              <div className="text-lg font-bold">
+                Mã số bệnh án: {record.id}
+              </div>
+              <div className="text-sm">
+                Thời gian điều trị: {formatDate(record.date)}
+              </div>
+              <div className="text-sm">Bác sĩ điều trị: {record.doctor_id}</div>
+              <div className="text-sm">Tóm tắt: {record.summary}</div>
             </div>
             <div className="flex space-x-2">
               <Link to={`/record/details?recordId=${record.id}`}>
