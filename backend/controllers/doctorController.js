@@ -25,3 +25,21 @@ exports.makeSchedule = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+exports.getDoctorById = async (req, res) => {
+  const doctorId = req.query.doctorId;
+
+  try {
+    const [rows] = await pool.query("SELECT * FROM doctor WHERE doctorid = ?", [
+      doctorId,
+    ]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};

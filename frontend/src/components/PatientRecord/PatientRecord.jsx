@@ -47,20 +47,20 @@ const PatientRecord = () => {
         }
         const patientData = await patientResponse.json();
 
-        // // Fetch doctor data
-        // const doctorResponse = await fetch(
-        //   `http://localhost:5000/api/doctor/data?doctorID=${doctor_id}`,
-        //   {
-        //     credentials: "include",
-        //   }
-        // );
-        // if (!doctorResponse.ok) {
-        //   console.error("Error fetching doctor info");
-        //   return;
-        // }
-        // const doctorData = await doctorResponse.json();
+        // Fetch doctor data
+        const doctorResponse = await fetch(
+          `http://localhost:5000/api/doctor/data?doctorId=${doctor_id}`,
+          {
+            credentials: "include",
+          }
+        );
+        if (!doctorResponse.ok) {
+          console.error("Error fetching doctor info");
+          return;
+        }
+        const doctorData = await doctorResponse.json();
 
-        // setDoctor(doctorData);
+        setDoctor(doctorData);
         setPatient(patientData);
         setRecord(data);
       } catch (error) {
@@ -93,8 +93,8 @@ const PatientRecord = () => {
       </div>
       <div className="flex justify-between mb-6">
         <div>
-          <p>Cơ quan chủ quản:</p>
-          <p>Cơ sở KB, CB:</p>
+          <p>Cơ quan chủ quản: Đại học Bách Khoa Hà Nội</p>
+          <p>Cơ sở KB, CB: Bệnh viện Bách Khoa </p>
         </div>
         <div className="text-right">
           <p>MS: {record.id}</p>
@@ -107,13 +107,13 @@ const PatientRecord = () => {
             <p>Họ và tên: {patient.fullname}</p>
           </div>
           <div>
-            <p>Ngày sinh: ______ / ______ / ______</p>
+            <p>Ngày sinh: {formatDate(patient.birthday)}</p>
           </div>
         </div>
         <p>Giới tính: {patient.gender === "male" ? "Nam" : "Nữ"}</p>
         <p>Địa chỉ: {patient.address}</p>
         <p>Ngày khám: {formatDate(record.date)}</p>
-        <p>Bác sĩ khám bệnh: _______________________</p>
+        <p>Bác sĩ khám bệnh: {doctor.fullname}</p>
       </div>
       <div className="mb-6">
         <h3 className="font-bold text-lg">II. CHẨN ĐOÁN</h3>
