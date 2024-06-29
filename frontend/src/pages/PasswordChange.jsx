@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-
+import { useLocation, useNavigate } from "react-router-dom";
 const PasswordChange = () => {
+  const navigate = useNavigate();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,6 +31,7 @@ const PasswordChange = () => {
       const result = await response.json();
       if (response.ok) {
         alert(result.message);
+        navigate("/home");
       } else {
         alert(result.message);
       }

@@ -15,13 +15,13 @@ const insertMockData = async () => {
 
     // Insert data into user table
     const users = [
-      { username: "doctor1", password: "password1", role: "doctor" },
-      { username: "doctor2", password: "password2", role: "doctor" },
-      { username: "patient1", password: "password3", role: "patient" },
-      { username: "patient2", password: "password4", role: "patient" },
-      { username: "patient3", password: "password5", role: "patient" },
-      { username: "patient4", password: "password6", role: "patient" },
-      { username: "patient5", password: "password7", role: "patient" },
+      { username: "bacsiA", password: "matkhauA", role: "doctor" },
+      { username: "bacsiB", password: "matkhauB", role: "doctor" },
+      { username: "benhnhanA", password: "matkhauC", role: "patient" },
+      { username: "benhnhanB", password: "matkhauD", role: "patient" },
+      { username: "benhnhanC", password: "matkhauE", role: "patient" },
+      { username: "benhnhanD", password: "matkhauF", role: "patient" },
+      { username: "benhnhanE", password: "matkhauG", role: "patient" },
     ];
     for (const user of users) {
       await connection.query(
@@ -31,7 +31,10 @@ const insertMockData = async () => {
     }
 
     // Insert data into department table
-    const departments = [{ name: "Cardiology" }, { name: "Neurology" }];
+    const departments = [
+      { name: "Khoa Chấn thương chỉnh hình" },
+      { name: "Khoa Da liễu" },
+    ];
     for (const department of departments) {
       await connection.query("INSERT INTO department (name) VALUES (?)", [
         department.name,
@@ -42,21 +45,21 @@ const insertMockData = async () => {
     const doctors = [
       {
         doctorid: 1,
-        fullname: "Dr. John Doe",
-        birthday: "1980-01-01",
-        gender: "male",
-        graduation_year: 2004,
+        fullname: "Lý Thị A",
+        birthday: "1975-03-10",
+        gender: "female",
+        graduation_year: 1999,
         department_id: 1,
-        phone_number: "123456789",
+        phone_number: "1010101010",
       },
       {
         doctorid: 2,
-        fullname: "Dr. Jane Smith",
-        birthday: "1985-05-15",
-        gender: "female",
-        graduation_year: 2008,
+        fullname: "Đinh Văn C",
+        birthday: "1982-08-20",
+        gender: "male",
+        graduation_year: 2006,
         department_id: 2,
-        phone_number: "987654321",
+        phone_number: "2020202020",
       },
     ];
     for (const doctor of doctors) {
@@ -78,53 +81,53 @@ const insertMockData = async () => {
     const patients = [
       {
         patient_id: 3,
-        fullname: "Jane Doe",
-        birthday: "1990-01-01",
-        gender: "female",
-        city: "Hanoi",
-        address: "123 Main St",
-        phone_number: "987654321",
-        health_card: "HC12345",
+        fullname: "Trần Văn B",
+        birthday: "1995-06-12",
+        gender: "male",
+        city: "Saigon",
+        address: "789 Birch St",
+        phone_number: "3030303030",
+        health_card: "HC67890",
       },
       {
         patient_id: 4,
-        fullname: "John Smith",
-        birthday: "1992-02-02",
-        gender: "male",
-        city: "Hanoi",
-        address: "456 Elm St",
-        phone_number: "123456789",
-        health_card: "HC23456",
+        fullname: "Phạm Thị A",
+        birthday: "1991-11-04",
+        gender: "female",
+        city: "Saigon",
+        address: "123 Maple St",
+        phone_number: "4040404040",
+        health_card: "HC78901",
       },
       {
         patient_id: 5,
-        fullname: "Alice Johnson",
-        birthday: "1995-03-03",
-        gender: "female",
-        city: "Hanoi",
-        address: "789 Oak St",
-        phone_number: "234567890",
-        health_card: "HC34567",
+        fullname: "Hoàng Văn C",
+        birthday: "1987-02-25",
+        gender: "male",
+        city: "Saigon",
+        address: "456 Cedar St",
+        phone_number: "5050505050",
+        health_card: "HC89012",
       },
       {
         patient_id: 6,
-        fullname: "Bob Brown",
-        birthday: "1988-04-04",
-        gender: "male",
-        city: "Hanoi",
-        address: "321 Pine St",
-        phone_number: "345678901",
-        health_card: "HC45678",
+        fullname: "Nguyễn Thị B",
+        birthday: "1993-09-15",
+        gender: "female",
+        city: "Saigon",
+        address: "321 Walnut St",
+        phone_number: "6060606060",
+        health_card: "HC90123",
       },
       {
         patient_id: 7,
-        fullname: "Carol White",
-        birthday: "1993-05-05",
-        gender: "female",
-        city: "Hanoi",
-        address: "654 Cedar St",
-        phone_number: "456789012",
-        health_card: "HC56789",
+        fullname: "Nguyễn Văn A",
+        birthday: "1998-05-05",
+        gender: "male",
+        city: "Saigon",
+        address: "654 Aspen St",
+        phone_number: "7070707070",
+        health_card: "HC01234",
       },
     ];
     for (const patient of patients) {
@@ -145,32 +148,68 @@ const insertMockData = async () => {
 
     // Insert data into schedule table
     const schedules = [
-      { user_id: 3, doctor_id: 1, date: "2024-01-01", status: "approved" },
-      { user_id: 4, doctor_id: 1, date: "2024-01-02", status: "approved" },
-      { user_id: 5, doctor_id: 2, date: "2024-01-03", status: "approved" },
-      { user_id: 6, doctor_id: 2, date: "2024-01-04", status: "unapproved" },
-      { user_id: 7, doctor_id: 1, date: "2024-01-05", status: "approved" },
+      {
+        patient_id: 3,
+        doctor_id: 1,
+        date: "2024-02-10",
+        time: "10:00 AM",
+        status: "approved",
+      },
+      {
+        patient_id: 4,
+        doctor_id: 1,
+        date: "2024-02-11",
+        time: "11:00 AM",
+        status: "approved",
+      },
+      {
+        patient_id: 5,
+        doctor_id: 2,
+        date: "2024-02-12",
+        time: "01:00 PM",
+        status: "approved",
+      },
+      {
+        patient_id: 6,
+        doctor_id: 2,
+        date: "2024-02-13",
+        time: "02:00 PM",
+        status: "unapproved",
+      },
+      {
+        patient_id: 7,
+        doctor_id: 1,
+        date: "2024-02-14",
+        time: "03:00 PM",
+        status: "approved",
+      },
     ];
     for (const schedule of schedules) {
       await connection.query(
-        "INSERT INTO schedule (user_id, doctor_id, date, status) VALUES (?, ?, ?, ?)",
-        [schedule.user_id, schedule.doctor_id, schedule.date, schedule.status]
+        "INSERT INTO schedule (patient_id, doctor_id, date, time, status) VALUES (?, ?, ?, ?, ?)",
+        [
+          schedule.patient_id,
+          schedule.doctor_id,
+          schedule.date,
+          schedule.time,
+          schedule.status,
+        ]
       );
     }
 
     // Insert data into image table
     const images = [
       {
-        imagename: "X-Ray",
-        result: "Normal",
-        date: "2024-01-01",
-        image_url: "http://example.com/xray.jpg",
+        imagename: "MRI",
+        result: "Bình thường",
+        date: "2024-02-10",
+        image_url: "http://example.com/mri.jpg",
       },
       {
-        imagename: "CT Scan",
-        result: "Abnormal",
-        date: "2024-01-02",
-        image_url: "http://example.com/ctscan.jpg",
+        imagename: "Siêu âm",
+        result: "Bất thường",
+        date: "2024-02-11",
+        image_url: "http://example.com/ultrasound.jpg",
       },
     ];
     for (const image of images) {
@@ -183,48 +222,48 @@ const insertMockData = async () => {
     // Insert data into record table
     const records = [
       {
-        name: "Medical Record 1",
+        name: "Hồ sơ y tế A",
         patient_id: 3,
         doctor_id: 1,
-        summary: "Healthy",
-        treatment_regimen: "None",
-        date: "2024-01-01",
+        summary: "Kiểm tra định kỳ",
+        treatment_regimen: "Không",
+        date: "2024-02-10",
         image_id: 1,
       },
       {
-        name: "Medical Record 2",
+        name: "Hồ sơ y tế B",
         patient_id: 4,
         doctor_id: 1,
-        summary: "Minor Cold",
-        treatment_regimen: "Rest",
-        date: "2024-01-02",
+        summary: "Triệu chứng cảm lạnh",
+        treatment_regimen: "Nghỉ ngơi và uống nước",
+        date: "2024-02-11",
         image_id: 1,
       },
       {
-        name: "Medical Record 3",
+        name: "Hồ sơ y tế C",
         patient_id: 5,
         doctor_id: 2,
-        summary: "Headache",
-        treatment_regimen: "Painkillers",
-        date: "2024-01-03",
+        summary: "Đau đầu",
+        treatment_regimen: "Thuốc giảm đau",
+        date: "2024-02-12",
         image_id: 2,
       },
       {
-        name: "Medical Record 4",
+        name: "Hồ sơ y tế D",
         patient_id: 6,
         doctor_id: 2,
-        summary: "Stomach Pain",
-        treatment_regimen: "Antacids",
-        date: "2024-01-04",
+        summary: "Đau bụng",
+        treatment_regimen: "Thuốc kháng axit",
+        date: "2024-02-13",
         image_id: 2,
       },
       {
-        name: "Medical Record 5",
+        name: "Hồ sơ y tế E",
         patient_id: 7,
         doctor_id: 1,
-        summary: "Flu",
-        treatment_regimen: "Rest and fluids",
-        date: "2024-01-05",
+        summary: "Cúm",
+        treatment_regimen: "Nghỉ ngơi và uống nước",
+        date: "2024-02-14",
         image_id: 1,
       },
     ];
@@ -244,10 +283,10 @@ const insertMockData = async () => {
     }
 
     await connection.commit();
-    console.log("All mock data inserted successfully!");
+    console.log("Tất cả dữ liệu giả đã được chèn thành công!");
   } catch (error) {
     await connection.rollback();
-    console.error("Error inserting mock data:", error);
+    console.error("Lỗi khi chèn dữ liệu giả:", error);
   } finally {
     connection.release();
   }

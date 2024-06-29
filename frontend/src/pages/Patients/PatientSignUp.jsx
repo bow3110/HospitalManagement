@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const PatientSignUp = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     username: "",
     password: "",
@@ -52,7 +54,10 @@ const PatientSignUp = () => {
       }
 
       const data = await response.json();
-      console.log(data);
+      if (data.message === "User created") {
+        alert("User created successfully");
+        navigate("/login");
+      }
     } catch (error) {
       console.error("Error signing up:", error);
     }
