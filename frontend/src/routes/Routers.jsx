@@ -18,7 +18,8 @@ import AppointmentTable from "../pages/Patients/AppointmentTable";
 import Takelist from "../pages/Doctors/Takelist";
 import PersonalInfoForm from "../pages/Patients/PersonalnfoForm";
 import DoctorInfoForm from "../pages/Doctors/DoctorInfoForm";
-import MyRecord from "../pages/MyRecord/MyRecord"; // Import the new component
+import MyRecord from "../pages/Record/MyRecord";
+import RecordForm from "../pages/Record/RecordForm";
 
 const ProtectedRoute = ({ children, role }) => {
   const { user } = useAuth();
@@ -105,6 +106,14 @@ const Routers = () => {
         element={
           <ProtectedRoute role="doctor">
             <Takelist />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/record/createRecord"
+        element={
+          <ProtectedRoute role="doctor">
+            <RecordForm />
           </ProtectedRoute>
         }
       />

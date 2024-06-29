@@ -12,7 +12,7 @@ const PatientSidebar = () => {
       link: "/patient/appointmenttable",
     },
     {
-      srcImg: "/vite.svg",
+      srcImg: "/user.svg",
       alt: "info",
       text: "Thông tin cá nhân",
       link: "/patient/info",

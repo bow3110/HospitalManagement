@@ -21,6 +21,11 @@ const PatientCard = ({ id, name, onShowDetails }) => {
         >
           Thông tin bệnh nhân
         </button>
+        <Link to={`/record/createRecord?patientId=${id}`}>
+          <button className="bg-black text-white px-3 py-1 rounded">
+            Tạo bệnh án
+          </button>
+        </Link>
       </div>
     </div>
   );
