@@ -167,7 +167,7 @@ const insertMockData = async () => {
         doctor_id: 2,
         date: "2024-02-12",
         time: "01:00 PM",
-        status: "approved",
+        status: "pending",
       },
       {
         patient_id: 6,
