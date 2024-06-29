@@ -8,6 +8,7 @@ const patientRoutes = require("./routes/patientRoutes");
 const userRoutes = require("./routes/userRoutes");
 const doctorRoutes = require("./routes/doctorRoutes");
 const recordRoutes = require("./routes/recordRoutes");
+const scheduleRoutes = require("./routes/scheduleRoutes");
 const { verifyToken, authorizeRoles } = require("./middleware/auth");
 
 const app = express();
@@ -35,6 +36,7 @@ app.use("/api/patient", patientRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/doctor", doctorRoutes);
 app.use("/api/record", recordRoutes);
+app.use("/api/schedule", verifyToken, authorizeRoles("doctor"), scheduleRoutes);
 
 // Protect routes
 app.use("/api/doctors", verifyToken, authorizeRoles("doctor"));
