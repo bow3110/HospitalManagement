@@ -2,19 +2,22 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import formatDate from "../../utils/formatDate";
+
 const RecordImage = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const recordId = queryParams.get("recordId");
   const navigate = useNavigate();
-  const [record, setRecord] = useState(null);
   const [doctor, setDoctor] = useState(null);
   const [patient, setPatient] = useState(null);
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchImage = async () => {
       try {
+        console.log("Fetching image with record id:", recordId);
         const response = await fetch(
           `http://localhost:5000/api/record/image?recordId=${recordId}`,
           {
@@ -24,11 +27,12 @@ const RecordImage = () => {
 
         if (!response.ok) {
           console.error("Failed to fetch image");
+          setError("Failed to fetch image");
           return;
         }
 
         const data = await response.json();
-        console.log(data);
+        console.log("Image data fetched:", data);
         setImage(data);
         const patient_id = data.patient_id;
         const doctor_id = data.doctor_id;
@@ -42,9 +46,12 @@ const RecordImage = () => {
         );
         if (!patientResponse.ok) {
           console.error("Error fetching patient info");
+          setError("Error fetching patient info");
           return;
         }
         const patientData = await patientResponse.json();
+        console.log("Patient data fetched:", patientData);
+
         // Fetch doctor data
         const doctorResponse = await fetch(
           `http://localhost:5000/api/doctor/data?doctorId=${doctor_id}`,
@@ -54,19 +61,42 @@ const RecordImage = () => {
         );
         if (!doctorResponse.ok) {
           console.error("Error fetching doctor info");
+          setError("Error fetching doctor info");
           return;
         }
         const doctorData = await doctorResponse.json();
+        console.log("Doctor data fetched:", doctorData);
 
         setDoctor(doctorData);
         setPatient(patientData);
       } catch (error) {
-        console.error("Failed to fetch image:", error);
+        console.error("Failed to fetch data:", error);
+        setError("An error occurred while fetching data");
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchImage();
+    if (recordId) {
+      fetchImage();
+    } else {
+      console.error("No recordId provided");
+      setError("No recordId provided");
+      setLoading(false);
+    }
   }, [recordId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!patient) {
+    return <div>Patient not found</div>;
+  }
 
   return (
     <div className="p-6 bg-white shadow-md rounded-md relative">
@@ -83,7 +113,9 @@ const RecordImage = () => {
         <p className="text-sm">Độc lập - Tự do - Hạnh phúc</p>
         <p className="text-sm">---------------------------</p>
         <h2 className="text-2xl font-bold mt-4">HÌNH ẢNH XÉT NGHIỆM</h2>
-        <p className="text-lg">{image.imagename}</p>
+        <p className="text-lg">
+          {image.imagename ? image.imagename : "no name"}
+        </p>
       </div>
       <div className="flex justify-between mb-6">
         <div>
@@ -114,7 +146,7 @@ const RecordImage = () => {
       <div className="mb-6">
         <h3 className="font-bold text-lg">II. HÌNH ẢNH</h3>
         <img
-          src="https://www.lompocvmc.com/images/blog/ct-scan.jpg"
+          src={image.image_url}
           alt={`Record ${recordId}`}
           className="w-full h-auto"
         />
