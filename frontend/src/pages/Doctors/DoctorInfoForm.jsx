@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const PersonalInfoForm = () => {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
@@ -23,7 +24,6 @@ const PersonalInfoForm = () => {
         });
         const data = await response.json();
         if (response.ok) {
-          console.log("Fetched patient info:", data);
           setFormData({
             username: data.username || "",
             name: data.fullname || "",
@@ -37,10 +37,16 @@ const PersonalInfoForm = () => {
             graduation_year: data.graduation_year || "",
           });
         } else {
-          console.error("Error fetching patient info:", data.message);
+          toast("Đã xảy ra lỗi. Vui lòng thử lại sau", {
+            type: "error",
+            position: "top-center",
+          });
         }
       } catch (error) {
-        console.error("Error fetching patient info:", error);
+        toast("Đã xảy ra lỗi. Vui lòng thử lại sau", {
+          type: "error",
+          position: "top-center",
+        });
       }
     };
 
@@ -57,8 +63,6 @@ const PersonalInfoForm = () => {
 
   const handleUpdate = async () => {
     try {
-      console.log("Updating patient info with data:", formData);
-
       const response = await fetch("http://localhost:5000/api/user/update", {
         method: "POST",
         headers: {
@@ -74,14 +78,21 @@ const PersonalInfoForm = () => {
 
       const result = await response.json();
       if (response.ok) {
-        alert(result.message);
+        toast("Cập nhật thông tin thành công", {
+          type: "success",
+          position: "top-center",
+        });
       } else {
-        alert(result.message);
-        console.error("Error updating patient info:", result);
+        toast(`Đã xảy ra lỗi: ${result.message}`, {
+          type: "error",
+          position: "top-center",
+        });
       }
     } catch (error) {
-      alert("An error occurred. Please try again later.");
-      console.error("Error updating patient info:", error);
+      toast("Đã xảy ra lỗi. Vui lòng thử lại sau", {
+        type: "error",
+        position: "top-center",
+      });
     }
   };
 
@@ -235,6 +246,7 @@ const PersonalInfoForm = () => {
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

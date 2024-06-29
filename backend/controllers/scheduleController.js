@@ -2,7 +2,6 @@ const pool = require("../config/database");
 
 exports.getSchedules = async (req, res) => {
   const doctorId = req.query.doctorId;
-  console.log(doctorId);
   try {
     const [rows] = await pool.query(
       "SELECT * FROM schedule WHERE doctor_id = ?",

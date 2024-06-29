@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const PasswordChange = () => {
   const navigate = useNavigate();
   const [oldPassword, setOldPassword] = useState("");
@@ -8,7 +12,10 @@ const PasswordChange = () => {
 
   const handleUpdate = async () => {
     if (newPassword !== confirmPassword) {
-      alert("Passwords do not match");
+      toast("Mật khẩu mới không khớp", {
+        type: "error",
+        position: "top-center",
+      });
       return;
     }
 
@@ -30,13 +37,25 @@ const PasswordChange = () => {
 
       const result = await response.json();
       if (response.ok) {
-        alert(result.message);
-        navigate("/home");
+        toast("Mật khẩu đã được thay đổi", {
+          type: "success",
+          position: "top-center",
+        });
+
+        setTimeout(() => {
+          navigate("/home");
+        }, 2000); // Wait for 2 seconds before navigating
       } else {
-        alert(result.message);
+        toast(result.message, {
+          type: "error",
+          position: "top-center",
+        });
       }
     } catch (error) {
-      alert("An error occurred. Please try again later.");
+      toast("An error occurred. Please try again later.", {
+        type: "error",
+        position: "top-center",
+      });
     }
   };
 
@@ -87,6 +106,7 @@ const PasswordChange = () => {
       >
         Cập nhật
       </button>
+      <ToastContainer />
     </div>
   );
 };

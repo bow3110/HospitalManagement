@@ -24,7 +24,6 @@ const PatientList = () => {
         }
 
         const data = await response.json();
-        console.log(data);
         setAllPatients(data);
       } catch (error) {
         console.log(error);

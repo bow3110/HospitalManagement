@@ -68,7 +68,6 @@ const RecordForm = () => {
         }
 
         const data = await response.json();
-        console.log("Doctor data fetched:", data);
         setFormData((prevData) => ({
           ...prevData,
           doctor_fullname: data.fullname,
@@ -143,7 +142,10 @@ const RecordForm = () => {
         throw new Error("Failed to insert record data");
       }
 
-      alert("Record created successfully!");
+      toast("Bệnh án đã được tạo thành công", {
+        type: "success",
+        position: "top-center",
+      });
       setFormData({
         patient_id: patientId || "",
         patient_fullname: "",
@@ -161,7 +163,10 @@ const RecordForm = () => {
       navigate(-1);
     } catch (error) {
       console.error(error);
-      alert("An error occurred while creating the record");
+      toast(`Đã xảy ra lỗi ${error.message}`, {
+        type: "error",
+        position: "top-center",
+      });
     }
   };
 

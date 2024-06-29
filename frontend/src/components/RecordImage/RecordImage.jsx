@@ -17,7 +17,6 @@ const RecordImage = () => {
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        console.log("Fetching image with record id:", recordId);
         const response = await fetch(
           `http://localhost:5000/api/record/image?recordId=${recordId}`,
           {
@@ -32,7 +31,6 @@ const RecordImage = () => {
         }
 
         const data = await response.json();
-        console.log("Image data fetched:", data);
         setImage(data);
         const patient_id = data.patient_id;
         const doctor_id = data.doctor_id;
@@ -50,7 +48,6 @@ const RecordImage = () => {
           return;
         }
         const patientData = await patientResponse.json();
-        console.log("Patient data fetched:", patientData);
 
         // Fetch doctor data
         const doctorResponse = await fetch(
@@ -65,7 +62,6 @@ const RecordImage = () => {
           return;
         }
         const doctorData = await doctorResponse.json();
-        console.log("Doctor data fetched:", doctorData);
 
         setDoctor(doctorData);
         setPatient(patientData);

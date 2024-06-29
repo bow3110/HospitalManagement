@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const AppointmentForm = () => {
   const { user } = useAuth();
   const [form, setForm] = useState({
@@ -26,7 +28,10 @@ const AppointmentForm = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          console.error("Error fetching patient info:", errorData.message);
+          toast(`Đã xảy ra lỗi: ${errorData.message}`, {
+            type: "error",
+            position: "top-center",
+          });
           setForm((prevForm) => ({ ...prevForm, patientName: "" }));
           return;
         }
@@ -56,8 +61,6 @@ const AppointmentForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Submit form logic here
-
     try {
       const response = await fetch(
         "http://localhost:5000/api/doctor/makeSchedule",
@@ -77,14 +80,17 @@ const AppointmentForm = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error making appointment:", errorData.message);
+        toast(`Đã xảy ra lỗi`, { type: "error", position: "top-center" });
         return;
       }
 
       const data = await response.json();
-      alert(data.message);
+      toast(`Hẹn lịch khám thành công`, {
+        type: "success",
+        position: "top-center",
+      });
     } catch (error) {
-      console.error("Error making appointment:", error);
+      toast(`Đã xảy ra lỗi`, { type: "error", position: "top-center" });
     }
   };
 
@@ -146,6 +152,7 @@ const AppointmentForm = () => {
           </button>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 };

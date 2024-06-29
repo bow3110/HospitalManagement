@@ -67,7 +67,6 @@ exports.updateMyInfo = async (req, res) => {
     }
   } else if (userRole == "doctor") {
     const { phone_number, department_name, graduation_year } = req.body;
-    console.log(phone_number, department_name, graduation_year);
     try {
       const [departmentRows] = await pool.query(
         "SELECT id FROM department WHERE name = ?",

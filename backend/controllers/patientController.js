@@ -7,7 +7,6 @@ exports.getPatientData = async (req, res) => {
       "SELECT * FROM patient WHERE patient_id = ?",
       [patientId]
     );
-    console.log(rows[0]);
     res.status(200).json(rows[0]);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -93,7 +92,6 @@ exports.signUp = async (req, res) => {
     address,
   } = req.body;
   try {
-    console.log(req.body);
     const [userRows] = await pool.query(
       "SELECT * FROM user WHERE username = ?",
       [username]
@@ -108,8 +106,6 @@ exports.signUp = async (req, res) => {
       [username, password, "patient"]
     );
 
-    // get inserted user id
-    console.log(insertUserRows.insertId);
     const userId = insertUserRows.insertId;
 
     const [insertPatientRows] = await pool.query(

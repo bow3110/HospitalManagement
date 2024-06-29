@@ -48,7 +48,6 @@ const PatientRecordsList = () => {
           setRecords(recordsData);
           const doctorIds = recordsData.map((record) => record.doctor_id);
           const uniqueDoctorIds = [...new Set(doctorIds)];
-          console.log(uniqueDoctorIds);
           const doctorPromises = uniqueDoctorIds.map((doctorId) =>
             fetch(
               `http://localhost:5000/api/doctor/data?doctorId=${doctorId}`,
@@ -59,14 +58,12 @@ const PatientRecordsList = () => {
           );
 
           const doctorsData = await Promise.all(doctorPromises);
-          console.log(`Doctors data:`, doctorsData);
 
           const doctorNamesMap = {};
           doctorsData.forEach((doctor) => {
             doctorNamesMap[doctor.doctorid] = doctor.fullname;
           });
           setDoctorNames(doctorNamesMap);
-          console.log(doctorNamesMap);
         } else {
           setError(recordsData.message);
         }

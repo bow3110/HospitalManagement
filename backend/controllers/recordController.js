@@ -11,7 +11,6 @@ exports.getRecordById = async (req, res) => {
     if (rows.length === 0) {
       return res.status(404).json({ message: "Record not found" });
     }
-    console.log(rows[0]);
     res.status(200).json(rows[0]);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -32,7 +31,6 @@ exports.getRecordImage = async (req, res) => {
         .status(404)
         .json({ message: "Image for requested record not found" });
     }
-    console.log(rows[0]);
     res.status(200).json(rows[0]);
   } catch (error) {
     console.log(error);

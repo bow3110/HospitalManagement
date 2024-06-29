@@ -30,7 +30,6 @@ const PatientDetailsModal = ({ patientId, onClose }) => {
         }
 
         const data = await response.json();
-        console.log(data);
         setPatient(data);
       } catch (error) {
         console.error("Error fetching patient info:", error);

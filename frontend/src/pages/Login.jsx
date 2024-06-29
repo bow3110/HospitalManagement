@@ -18,7 +18,6 @@ const Login = () => {
         { withCredentials: true }
       );
 
-      console.log("Login response:", response.data);
       login(response.data.user);
       navigate("/home");
     } catch (error) {
@@ -38,7 +37,7 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              Username
+              Tên đăng nhập
             </label>
             <input
               type="text"
@@ -50,7 +49,7 @@ const Login = () => {
           </div>
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2">
-              Password
+              Mật khẩu
             </label>
             <input
               type="password"
