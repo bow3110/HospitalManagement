@@ -1,17 +1,75 @@
 // src/components/PatientRecord/PatientRecord.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { patientsData } from "../../data/patientsData";
 
+const formatDate = (dateString) => {
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return new Date(dateString).toLocaleDateString("vi-VN", options);
+};
 const PatientRecord = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const recordId = queryParams.get("recordId");
   const navigate = useNavigate();
+  const [record, setRecord] = useState(null);
+  const [doctor, setDoctor] = useState(null);
+  const [patient, setPatient] = useState(null);
+  useEffect(() => {
+    const fetchRecord = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/record/details?recordId=${recordId}`,
+          {
+            credentials: "include",
+          }
+        );
 
-  const record = patientsData
-    .flatMap((p) => p.records)
-    .find((r) => r.id === recordId);
+        if (!response.ok) {
+          console.error("Failed to fetch record");
+          return;
+        }
+
+        const data = await response.json();
+        console.log(data);
+        const patient_id = data.patient_id;
+        const doctor_id = data.doctor_id;
+
+        // Fetch patient data
+        const patientResponse = await fetch(
+          `http://localhost:5000/api/patient/data?patientID=${patient_id}`,
+          {
+            credentials: "include",
+          }
+        );
+        if (!patientResponse.ok) {
+          console.error("Error fetching patient info");
+          return;
+        }
+        const patientData = await patientResponse.json();
+
+        // // Fetch doctor data
+        // const doctorResponse = await fetch(
+        //   `http://localhost:5000/api/doctor/data?doctorID=${doctor_id}`,
+        //   {
+        //     credentials: "include",
+        //   }
+        // );
+        // if (!doctorResponse.ok) {
+        //   console.error("Error fetching doctor info");
+        //   return;
+        // }
+        // const doctorData = await doctorResponse.json();
+
+        // setDoctor(doctorData);
+        setPatient(patientData);
+        setRecord(data);
+      } catch (error) {
+        console.error("Failed to fetch record:", error);
+      }
+    };
+
+    fetchRecord();
+  }, [recordId]);
 
   if (!record) {
     return <div>Record not found</div>;
@@ -46,30 +104,24 @@ const PatientRecord = () => {
         <h3 className="font-bold text-lg">I. HÀNH CHÍNH</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p>Họ và tên: _______________________</p>
+            <p>Họ và tên: {patient.fullname}</p>
           </div>
           <div>
             <p>Ngày sinh: ______ / ______ / ______</p>
           </div>
         </div>
-        <p>Giới tính: _______________________</p>
-        <p>Địa chỉ: _______________________</p>
-        <p>Ngày khám: _______________________</p>
+        <p>Giới tính: {patient.gender === "male" ? "Nam" : "Nữ"}</p>
+        <p>Địa chỉ: {patient.address}</p>
+        <p>Ngày khám: {formatDate(record.date)}</p>
         <p>Bác sĩ khám bệnh: _______________________</p>
       </div>
       <div className="mb-6">
         <h3 className="font-bold text-lg">II. CHẨN ĐOÁN</h3>
-        <p>Triệu chứng bệnh: _______________________</p>
-        <p>Chẩn đoán bệnh: _______________________</p>
+        <p>Chẩn đoán bệnh: {record.summary}</p>
       </div>
       <div className="mb-6">
         <h3 className="font-bold text-lg">III. PHÁC ĐỒ ĐIỀU TRỊ BỆNH</h3>
-        <p>______________________________________________</p>
-      </div>
-      <div className="flex justify-end mt-8">
-        <button className="bg-black text-white px-4 py-2 rounded">
-          Cập nhật
-        </button>
+        <p>{record.treatment_regimen}</p>
       </div>
     </div>
   );
