@@ -6,8 +6,10 @@ import DoctorDetailsModal from "../../components/DoctorDetailsModal/DoctorDetail
 const AppointmentsTable = () => {
   const { user } = useAuth();
   const [appointments, setAppointments] = useState([]);
+  const [filteredAppointments, setFilteredAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDoctorId, setSelectedDoctorId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -35,6 +37,7 @@ const AppointmentsTable = () => {
           })
         );
         setAppointments(appointmentsWithDoctorData);
+        setFilteredAppointments(appointmentsWithDoctorData);
       } catch (error) {
         console.error("Failed to fetch appointments:", error);
       } finally {
@@ -44,6 +47,16 @@ const AppointmentsTable = () => {
 
     fetchAppointments();
   }, [user.id]);
+
+  useEffect(() => {
+    setFilteredAppointments(
+      appointments.filter((appointment) =>
+        appointment.doctor.fullname
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [searchTerm, appointments]);
 
   const handleShowDetails = (doctorId) => {
     setSelectedDoctorId(doctorId);
@@ -75,6 +88,7 @@ const AppointmentsTable = () => {
         appointment.id === scheduleId ? { ...appointment, status } : appointment
       );
       setAppointments(updatedAppointments);
+      setFilteredAppointments(updatedAppointments);
     } catch (error) {
       console.error("Error updating schedule status:", error);
     }
@@ -90,6 +104,8 @@ const AppointmentsTable = () => {
         <input
           type="text"
           placeholder="Tìm kiếm bác sĩ"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="p-2 border border-gray-300 rounded-lg w-1/3"
         />
         <button className="p-2 border border-gray-300 rounded-lg">
@@ -108,7 +124,7 @@ const AppointmentsTable = () => {
           </tr>
         </thead>
         <tbody>
-          {appointments.map((appointment) => (
+          {filteredAppointments.map((appointment) => (
             <tr key={appointment.id}>
               <td className="border p-2">{appointment.id}</td>
               <td
