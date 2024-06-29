@@ -125,22 +125,8 @@ const Routers = () => {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/record/details"
-        element={
-          <ProtectedRoute role="doctor">
-            <PatientRecord />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/record/images"
-        element={
-          <ProtectedRoute role="doctor">
-            <RecordImage />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/record/details" element={<PatientRecord />} />
+      <Route path="/record/images" element={<RecordImage />} />
       <Route
         path="/patient/myrecords"
         element={
