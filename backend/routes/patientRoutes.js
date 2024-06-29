@@ -9,7 +9,12 @@ const { verifyToken, authorizeRoles } = require("../middleware/auth");
 
 const router = express.Router();
 
-router.get("/data", verifyToken, authorizeRoles("doctor"), getPatientData);
+router.get(
+  "/data",
+  verifyToken,
+  authorizeRoles("doctor", "patient"),
+  getPatientData
+);
 router.post("/signup", signUp);
 router.get(
   "/getAllPatients",
@@ -20,7 +25,7 @@ router.get(
 router.get(
   "/records",
   verifyToken,
-  authorizeRoles("doctor"),
+  authorizeRoles("doctor", "patient"),
   getPatientRecords
 );
 
