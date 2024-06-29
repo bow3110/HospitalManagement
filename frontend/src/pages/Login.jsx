@@ -18,7 +18,6 @@ const Login = () => {
         { withCredentials: true }
       );
 
-      console.log("Login response:", response.data);
       login(response.data.user);
       navigate("/home");
     } catch (error) {

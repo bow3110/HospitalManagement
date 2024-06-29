@@ -30,7 +30,6 @@ const PatientRecord = () => {
         }
 
         const data = await response.json();
-        console.log(data);
         const patient_id = data.patient_id;
         const doctor_id = data.doctor_id;
 

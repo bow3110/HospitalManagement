@@ -17,8 +17,9 @@ import About from "../components/About/About";
 import ServiceList from "../components/Services/ServiceList";
 import DoctorList from "../components/Doctors/DoctorList";
 import FaqList from "../components/Faq/FaqList";
-import { useAuth } from "../context/AuthContext";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Home = () => {
   return (
     <>
@@ -273,7 +274,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* faq section*/}
+      <ToastContainer />
     </>
   );
 };

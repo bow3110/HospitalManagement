@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const PatientSignUp = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -23,9 +25,11 @@ const PatientSignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
     if (form.password !== form.confirmPassword) {
-      console.error("Passwords do not match");
+      toast("Mật khẩu không khớp", {
+        type: "error",
+        position: "top-center",
+      });
       return;
     }
     try {
@@ -49,17 +53,29 @@ const PatientSignUp = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error signing up:", errorData.message);
+        toast(`Đã xảy ra lỗi: ${errorData.message}`, {
+          type: "error",
+          position: "top-center",
+        });
         return;
       }
 
       const data = await response.json();
       if (data.message === "User created") {
-        alert("User created successfully");
-        navigate("/login");
+        toast("Đăng ký thành công", {
+          type: "success",
+          position: "top-center",
+        });
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
       }
     } catch (error) {
-      console.error("Error signing up:", error);
+      toast(`Đã xảy ra lỗi ${error}`, {
+        type: "error",
+        position: "top-center",
+      });
     }
   };
 
@@ -223,6 +239,7 @@ const PatientSignUp = () => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </section>
   );
 };
