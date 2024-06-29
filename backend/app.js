@@ -36,7 +36,7 @@ app.use("/api/doctor", doctorRoutes);
 
 // Protect routes
 app.use("/api/doctors", verifyToken, authorizeRoles("doctor"));
-app.use("/api/patient", verifyToken, authorizeRoles("doctor", "patient"));
+// app.use("/api/patient", authorizeRoles("doctor", "patient"));
 app.use("/api/user", verifyToken);
 
 app.listen(5000, () => {

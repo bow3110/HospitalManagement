@@ -1,10 +1,8 @@
 const express = require("express");
 const {
-  getPatientRecords,
-  getMyRecords,
-  updatePatientInfo,
   getPatientData,
   signUp,
+  getAllPatients,
 } = require("../controllers/patientController");
 const { verifyToken, authorizeRoles } = require("../middleware/auth");
 
@@ -12,20 +10,13 @@ const router = express.Router();
 
 router.get("/data", verifyToken, authorizeRoles("doctor"), getPatientData);
 
-router.post("/signup", signUp);
+router.get(
+  "/getAllPatients",
+  verifyToken,
+  authorizeRoles("doctor"),
+  getAllPatients
+);
 
-// router.get(
-//   "/records",
-//   verifyToken,
-//   authorizeRoles("doctor"),
-//   getPatientRecords
-// );
-// router.get("/myrecords", verifyToken, authorizeRoles("patient"), getMyRecords);
-// router.post(
-//   "/update",
-//   verifyToken,
-//   authorizeRoles("patient"),
-//   updatePatientInfo
-// );
+router.post("/signup", signUp);
 
 module.exports = router;

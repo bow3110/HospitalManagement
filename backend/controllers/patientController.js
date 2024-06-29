@@ -13,6 +13,16 @@ exports.getPatientData = async (req, res) => {
   }
 };
 
+exports.getAllPatients = async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM patient");
+    res.status(200).json(rows);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 exports.getPatientRecords = async (req, res) => {
   const patientId = req.query.patientId;
 

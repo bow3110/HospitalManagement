@@ -1,19 +1,42 @@
 // src/components/PatientList/PatientList.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PatientCard from "./PatientCard";
 import PatientDetailsModal from "../PatientDetailsModal/PatientDetailsModal";
-
-const patientsData = [
-  { id: "1", name: "Hoang Duy Anh" },
-  { id: "2", name: "Hoang Thi Kieu Thuong" },
-];
 
 const PatientList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPatientId, setSelectedPatientId] = useState(null);
 
-  const filteredPatients = patientsData.filter((patient) =>
-    patient.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const [allPatients, setAllPatients] = useState([]);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/patient/getAllPatients",
+          {
+            credentials: "include",
+          }
+        );
+        if (!response.ok) {
+          console.error("Failed to fetch patients");
+          return;
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setAllPatients(data);
+      } catch (error) {
+        console.log(error);
+        console.error("Failed to fetch patients:", error);
+      }
+    };
+
+    fetchPatients();
+  }, []);
+
+  const filteredPatients = allPatients.filter((patient) =>
+    patient.fullname.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleShowDetails = (id) => {
@@ -36,9 +59,9 @@ const PatientList = () => {
       <div className="bg-white shadow-md rounded">
         {filteredPatients.map((patient) => (
           <PatientCard
-            key={patient.id}
-            id={patient.id}
-            name={patient.name}
+            key={patient.patient_id}
+            id={patient.patient_id}
+            name={patient.fullname}
             onShowDetails={handleShowDetails}
           />
         ))}
