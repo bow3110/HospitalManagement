@@ -16,22 +16,20 @@ const About = () => {
           </div>
           {/* about content */}
           <div className="w-full lg:w-1/2 xl:w-[670px] order-1 lg:order-2 ">
-            <h2 className="heading">Proud to be one of the nations best</h2>
+            <h2 className="heading">
+              Tự hào là một trong những bệnh viện tốt nhất của quốc gia.
+            </h2>
             <p className="text__para">
-              For 30 years in a row, U.S. News & World Report hos recognized us
-              as one of the best publics hospitals in the Nation and #1 in
-              Texas. Lorem ipsum dolor sit amet consectectur, adipisicing elit.
-              Quas, nemo
+              Suốt 30 năm liên tiếp, V.N. News & World Report đã công nhận chúng
+              tôi là một trong những bệnh viện công lập hàng đầu của quốc gia và
+              hạng 1 tại Hà Nội.
             </p>
             <p className="text__para mt-[30px] ">
-              Our best is something for each day, carping for our patients-not
-              looking back at what we accomplished but towards what we can do
-              tomorrow. Providing the best. Lorem ipsum dolor sit amet,
-              consectetur adipisicing elit. Aliquid, modi?
+              Chúng tôi luôn cố gắng hết sức mình mỗi ngày, chăm sóc bệnh nhân
+              của mình - không ngủ quên trên những gì chúng tôi đã đạt được mà
+              hướng tới những gì chúng tôi có thể làm vào ngày mai. Mang đến
+              những điều tốt nhất.
             </p>
-            <Link to="/">
-              <button className="btn">Learn more</button>{" "}
-            </Link>
           </div>
         </div>
       </div>

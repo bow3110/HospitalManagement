@@ -1,27 +1,22 @@
 export const faqs = [
   {
-    question: "What is your medical care?",
+    question: "Dịch vụ chăm sóc y tế của bệnh viện là gì?",
     content:
-      "One Medical was founded on a better model of care one designed around patients needs that provides a higher level of quality and service affordably. We do this through innovative design, excellent customer service, and the efficient use of technology.",
+      "One Medical được thành lập trên một mô hình chăm sóc tốt hơn, được thiết kế xung quanh nhu cầu của bệnh nhân để cung cấp một mức độ chất lượng và dịch vụ cao hơn một cách phù hợp về giá cả. Chúng tôi làm điều này thông qua thiết kế sáng tạo, dịch vụ khách hàng xuất sắc và sử dụng công nghệ hiệu quả.",
   },
   {
-    question: "What happens if I need to go a hospital?",
+    question: "Nếu tôi cần đi viện thì sẽ như thế nào?",
     content:
-      "One Medical was founded on a better model of care one designed around patients needs that provides a higher level of quality and service affordably. We do this through innovative design, excellent customer service, and the efficient use of technology.",
+      "One Medical được thành lập trên một mô hình chăm sóc tốt hơn, được thiết kế xung quanh nhu cầu của bệnh nhân để cung cấp một mức độ chất lượng và dịch vụ cao hơn một cách phù hợp về giá cả. Chúng tôi làm điều này thông qua thiết kế sáng tạo, dịch vụ khách hàng xuất sắc và sử dụng công nghệ hiệu quả.",
   },
   {
-    question: "What happens if I need to go a hospital?",
+    question: "Tôi có thể đến văn phòng y tế của bệnh viện không?",
     content:
-      "One Medical was founded on a better model of care one designed around patients needs that provides a higher level of quality and service affordably. We do this through innovative design, excellent customer service, and the efficient use of technology.",
+      "One Medical được thành lập trên một mô hình chăm sóc tốt hơn, được thiết kế xung quanh nhu cầu của bệnh nhân để cung cấp một mức độ chất lượng và dịch vụ cao hơn một cách phù hợp về giá cả. Chúng tôi làm điều này thông qua thiết kế sáng tạo, dịch vụ khách hàng xuất sắc và sử dụng công nghệ hiệu quả.",
   },
   {
-    question: "Can I visit your medical office?",
+    question: "Bệnh viện có cung cấp chăm sóc khẩn cấp không?",
     content:
-      "One Medical was founded on a better model of care one designed around patients needs that provides a higher level of quality and service affordably. We do this through innovative design, excellent customer service, and the efficient use of technology.",
-  },
-  {
-    question: "Does you provide urgent care?",
-    content:
-      "One Medical was founded on a better model of care one designed around patients needs that provides a higher level of quality and service affordably. We do this through innovative design, excellent customer service, and the efficient use of technology.",
+      "One Medical được thành lập trên một mô hình chăm sóc tốt hơn, được thiết kế xung quanh nhu cầu của bệnh nhân để cung cấp một mức độ chất lượng và dịch vụ cao hơn một cách phù hợp về giá cả. Chúng tôi làm điều này thông qua thiết kế sáng tạo, dịch vụ khách hàng xuất sắc và sử dụng công nghệ hiệu quả.",
   },
 ];
