@@ -2,10 +2,13 @@ import React, { useState } from "react";
 
 const PatientSignUp = () => {
   const [form, setForm] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
     fullName: "",
     phoneNumber: "",
     dateOfBirth: "",
-    insuranceNumber: "",
+    healthCardNum: "",
     gender: "Nam",
     city: "",
     address: "",
@@ -16,9 +19,43 @@ const PatientSignUp = () => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(form);
+    if (form.password !== form.confirmPassword) {
+      console.error("Passwords do not match");
+      return;
+    }
+    try {
+      const response = await fetch("http://localhost:5000/api/patient/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: form.username,
+          password: form.password,
+          fullName: form.fullName,
+          phoneNumber: form.phoneNumber,
+          dateOfBirth: form.dateOfBirth,
+          healthCardNum: form.healthCardNum,
+          gender: form.gender === "Nam" ? "male" : "female",
+          city: form.city,
+          address: form.address,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error signing up:", errorData.message);
+        return;
+      }
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error signing up:", error);
+    }
   };
 
   return (
@@ -26,6 +63,45 @@ const PatientSignUp = () => {
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold mb-6 text-center">ĐĂNG KÝ</h2>
         <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Username
+            </label>
+            <input
+              type="text"
+              name="username"
+              value={form.username}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Enter your username"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Enter your password"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Confirm your password"
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Họ và Tên
@@ -70,8 +146,8 @@ const PatientSignUp = () => {
             </label>
             <input
               type="text"
-              name="insuranceNumber"
-              value={form.insuranceNumber}
+              name="healthCardNum"
+              value={form.healthCardNum}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
               placeholder="Enter your insurance number"

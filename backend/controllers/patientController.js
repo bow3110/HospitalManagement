@@ -84,3 +84,62 @@ exports.getMyRecords = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+exports.signUp = async (req, res) => {
+  const {
+    username,
+    password,
+    fullName,
+    phoneNumber,
+    dateOfBirth,
+    healthCardNum,
+    gender,
+    city,
+    address,
+  } = req.body;
+  try {
+    console.log(req.body);
+    const [userRows] = await pool.query(
+      "SELECT * FROM user WHERE username = ?",
+      [username]
+    );
+
+    if (userRows.length > 0) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
+
+    const [insertUserRows] = await pool.query(
+      "INSERT INTO user (username, password, role) VALUES (?, ?, ?)",
+      [username, password, "patient"]
+    );
+
+    // get inserted user id
+    console.log(insertUserRows.insertId);
+    const userId = insertUserRows.insertId;
+
+    const [insertPatientRows] = await pool.query(
+      "INSERT INTO patient (patient_id, fullname, birthday, gender, city, address, phone_number, health_card) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+        userId,
+        fullName,
+        dateOfBirth,
+        gender,
+        city,
+        address,
+        phoneNumber,
+        healthCardNum,
+      ]
+    );
+
+    if (insertPatientRows.affectedRows === 0) {
+      return res
+        .status(500)
+        .json({ message: "Please check your details again" });
+    }
+
+    res.status(201).json({ message: "User created" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
