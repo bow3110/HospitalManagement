@@ -36,7 +36,12 @@ app.use("/api/patient", patientRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/doctor", doctorRoutes);
 app.use("/api/record", recordRoutes);
-app.use("/api/schedule", verifyToken, authorizeRoles("doctor"), scheduleRoutes);
+app.use(
+  "/api/schedule",
+  verifyToken,
+  authorizeRoles("doctor", "patient"),
+  scheduleRoutes
+);
 
 // Protect routes
 app.use("/api/doctors", verifyToken, authorizeRoles("doctor"));

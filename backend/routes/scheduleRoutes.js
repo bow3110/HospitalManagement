@@ -1,7 +1,11 @@
 const express = require("express");
 
 const { verifyToken, authorizeRoles } = require("../middleware/auth");
-const { getSchedules } = require("../controllers/scheduleController");
+const {
+  getSchedules,
+  getSchedulesPatient,
+  modifySchedule,
+} = require("../controllers/scheduleController");
 
 const router = express.Router();
 
@@ -10,6 +14,20 @@ router.get(
   verifyToken,
   authorizeRoles("doctor"),
   getSchedules
+);
+
+router.get(
+  "/getSchedulesPatient",
+  verifyToken,
+  authorizeRoles("patient"),
+  getSchedulesPatient
+);
+
+router.post(
+  "/modifySchedule",
+  verifyToken,
+  authorizeRoles("doctor", "patient"),
+  modifySchedule
 );
 
 module.exports = router;

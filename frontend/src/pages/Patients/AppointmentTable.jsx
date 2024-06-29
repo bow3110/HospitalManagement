@@ -1,102 +1,173 @@
-import React from "react";
-
-const appointments = [
-  {
-    id: "FIG-123",
-    name: "Bác sĩ A",
-    date: "Dec 5",
-    time: "10:00 AM",
-    status: "Placeholder",
-    accept: true,
-    cancel: false,
-  },
-  {
-    id: "FIG-122",
-    name: "Bác sĩ B",
-    date: "Dec 5",
-    time: "11:00 AM",
-    status: "Placeholder",
-    accept: true,
-    cancel: false,
-  },
-  {
-    id: "FIG-120",
-    name: "Bác sĩ C",
-    date: "Dec 5",
-    time: "12:00 PM",
-    status: "Placeholder",
-    accept: true,
-    cancel: false,
-  },
-];
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
+import formatDate from "../../utils/formatDate";
+import DoctorDetailsModal from "../../components/DoctorDetailsModal/DoctorDetailsModal";
 
 const AppointmentsTable = () => {
+  const { user } = useAuth();
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedDoctorId, setSelectedDoctorId] = useState(null);
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:5000/api/schedule/getSchedulesPatient?patientId=${user.id}`,
+          {
+            credentials: "include",
+          }
+        );
+        const data = await res.json();
+        const appointmentsWithDoctorData = await Promise.all(
+          data.map(async (appointment) => {
+            const doctorResponse = await fetch(
+              `http://localhost:5000/api/doctor/data?doctorId=${appointment.doctor_id}`,
+              {
+                credentials: "include",
+              }
+            );
+            const doctorData = await doctorResponse.json();
+            return {
+              ...appointment,
+              doctor: doctorData,
+            };
+          })
+        );
+        setAppointments(appointmentsWithDoctorData);
+      } catch (error) {
+        console.error("Failed to fetch appointments:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  }, [user.id]);
+
+  const handleShowDetails = (doctorId) => {
+    setSelectedDoctorId(doctorId);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedDoctorId(null);
+  };
+
+  const handleUpdateStatus = async (scheduleId, status) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/schedule/modifySchedule?scheduleId=${scheduleId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ status }),
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to update schedule status");
+      }
+
+      const updatedAppointments = appointments.map((appointment) =>
+        appointment.id === scheduleId ? { ...appointment, status } : appointment
+      );
+      setAppointments(updatedAppointments);
+    } catch (error) {
+      console.error("Error updating schedule status:", error);
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="container mx-auto p-4 max-w-screen-lg">
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border-b border-gray-300 text-left">
-                ID
-              </th>
-              <th className="py-2 px-4 border-b border-gray-300 text-left">
-                Tên bác sĩ
-              </th>
-              <th className="py-2 px-4 border-b border-gray-300 text-left">
-                Ngày
-              </th>
-              <th className="py-2 px-4 border-b border-gray-300 text-left">
-                Giờ
-              </th>
-              <th className="py-2 px-4 border-b border-gray-300 text-left">
-                Xác nhận
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {appointments.map((appointment) => (
-              <tr key={appointment.id}>
-                <td className="py-2 px-4 border-b border-gray-300">
-                  {appointment.id}
-                </td>
-                <td className="py-2 px-4 border-b border-gray-300">
-                  {appointment.name}
-                </td>
-                <td className="py-2 px-4 border-b border-gray-300">
-                  {appointment.date}
-                </td>
-                <td className="py-2 px-4 border-b border-gray-300">
-                  {appointment.time}
-                </td>
-                <td className="py-2 px-4 border-b border-gray-300">
-                  {appointment.status}
-                </td>
-                <td className="py-2 px-4 border-b border-gray-300">
-                  <button
-                    className={`p-2 rounded ${
-                      appointment.cancel
-                        ? "bg-red-500 text-white"
-                        : "bg-gray-300"
-                    }`}
-                  >
-                    {appointment.cancel ? "Cancel" : "Accept"}
-                  </button>
-                  <button
-                    className={`p-2 rounded ${
-                      appointment.accept
-                        ? "bg-red-500 text-white"
-                        : "bg-gray-300"
-                    }`}
-                  >
-                    {appointment.accept ? "Cancel" : "Accept"}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-4">
+        <input
+          type="text"
+          placeholder="Tìm kiếm bác sĩ"
+          className="p-2 border border-gray-300 rounded-lg w-1/3"
+        />
+        <button className="p-2 border border-gray-300 rounded-lg">
+          Filter
+        </button>
       </div>
+      <table className="min-w-full bg-white border border-gray-200">
+        <thead>
+          <tr>
+            <th className="border p-2 text-left">ID</th>
+            <th className="border p-2 text-left">Tên bác sĩ</th>
+            <th className="border p-2 text-left">Ngày</th>
+            <th className="border p-2 text-left">Giờ</th>
+            <th className="border p-2 text-left">Trạng thái</th>
+            <th className="border p-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {appointments.map((appointment) => (
+            <tr key={appointment.id}>
+              <td className="border p-2">{appointment.id}</td>
+              <td
+                className="border p-2 hover:font-bold cursor-pointer"
+                onClick={() => handleShowDetails(appointment.doctor_id)}
+              >
+                {appointment.doctor.fullname}
+              </td>
+              <td className="border p-2">{formatDate(appointment.date)}</td>
+              <td className="border p-2">{appointment.time}</td>
+              <td className="border p-2">
+                <span
+                  className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
+                    appointment.status === "approved"
+                      ? "bg-green-200 text-green-800"
+                      : appointment.status === "unapproved"
+                      ? "bg-red-200 text-red-800"
+                      : "bg-yellow-200 text-yellow-800"
+                  }`}
+                >
+                  {appointment.status === "approved"
+                    ? "Đã chấp nhận"
+                    : appointment.status === "unapproved"
+                    ? "Đã từ chối"
+                    : "Đang chờ xác nhận"}
+                </span>
+              </td>
+              <td className="border p-2">
+                {appointment.status === "pending" && (
+                  <>
+                    <button
+                      className="bg-green-400 text-white p-2 rounded mr-2"
+                      onClick={() =>
+                        handleUpdateStatus(appointment.id, "approved")
+                      }
+                    >
+                      Accept
+                    </button>
+                    <button
+                      className="bg-red-500 text-white p-2 rounded"
+                      onClick={() =>
+                        handleUpdateStatus(appointment.id, "unapproved")
+                      }
+                    >
+                      Reject
+                    </button>
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {selectedDoctorId && (
+        <DoctorDetailsModal
+          doctorId={selectedDoctorId}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import formatDate from "../../utils/formatDate";
 import { Link } from "react-router-dom";
+
 const TaskList = () => {
   const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
@@ -84,10 +85,16 @@ const TaskList = () => {
                   className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
                     task.status === "approved"
                       ? "bg-green-200 text-green-800"
-                      : "bg-red-200 text-red-800"
+                      : task.status === "unapproved"
+                      ? "bg-red-200 text-red-800"
+                      : "bg-yellow-200 text-yellow-800"
                   }`}
                 >
-                  {task.status}
+                  {task.status === "approved"
+                    ? "Đồng ý"
+                    : task.status === "unapproved"
+                    ? "Đã từ chối"
+                    : "Đang chờ xác nhận"}
                 </span>
               </td>
               <td className="border p-2">
