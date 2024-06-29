@@ -21,7 +21,7 @@ const PatientSidebar = () => {
       srcImg: "/search.svg",
       alt: "records",
       text: "Bệnh án của tôi",
-      link: "/myrecord",
+      link: "/patients/myrecords",
     },
   ];
 

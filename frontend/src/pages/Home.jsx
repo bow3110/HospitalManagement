@@ -37,10 +37,6 @@ const Home = () => {
                   "Trao quyền cho bạn để sống một cuộc sống khỏe mạnh hơn với
                   dịch vụ chăm sóc toàn diện, lấy bệnh nhân làm trung tâm"
                 </p>
-
-                <Link to="/login">
-                  <button className="btn">Đặt lịch hẹn ngay</button>
-                </Link>
               </div>
               {/* hero counter */}
               <div className="mt-[30px] lg:mt-[70px] flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-[30px] ">
