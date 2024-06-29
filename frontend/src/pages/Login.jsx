@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext"; // Ensure the import path is correct
 import { useNavigate } from "react-router-dom";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -19,11 +20,21 @@ const Login = () => {
       );
 
       login(response.data.user);
-      navigate("/home");
+      toast("Đăng nhập thành công", {
+        type: "success",
+        position: "top-center",
+      });
+
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
     } catch (error) {
-      console.error(
-        "Login failed",
-        error.response ? error.response.data.message : error.message
+      toast(
+        "Đăng nhập thất bại. Vui lòng kiểm tra lại tài khoản hoặc mật khẩu",
+        {
+          type: "error",
+          position: "top-center",
+        }
       );
     }
   };
