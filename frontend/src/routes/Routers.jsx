@@ -142,7 +142,7 @@ const Routers = () => {
         }
       />
       <Route
-        path="/myrecord"
+        path="/patient/myrecords"
         element={
           <ProtectedRoute role="patient">
             <MyRecord />
