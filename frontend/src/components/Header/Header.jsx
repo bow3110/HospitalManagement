@@ -105,6 +105,13 @@ const Header = () => {
                         >
                           Lịch hẹn của tôi
                         </Link>
+                        <Link
+                          to="/passwordchange"
+                          className="block px-2 py-1 text-sm text-gray-800 hover:bg-gray-100"
+                          onClick={() => setShowDropdown(false)}
+                        >
+                          Đổi mật khẩu
+                        </Link>
                       </>
                     ) : null}
                     <button
