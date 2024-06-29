@@ -1,25 +1,45 @@
 // src/components/PatientDetailsModal/PatientDetailsModal.jsx
-import React from "react";
-
-const patientsData = [
-  {
-    id: "1",
-    name: "Hoang Duy Anh",
-    gender: "Nam",
-    birthDate: "01/01/1990",
-    healthCardNumber: "123456789",
-  },
-  {
-    id: "2",
-    name: "Hoang Thi Kieu Thuong",
-    gender: "Nữ",
-    birthDate: "02/02/1992",
-    healthCardNumber: "987654321",
-  },
-];
+import React, { useEffect, useState } from "react";
 
 const PatientDetailsModal = ({ patientId, onClose }) => {
-  const patient = patientsData.find((p) => p.id === patientId);
+  const [patient, setPatient] = useState(null);
+
+  // Function to format date
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("vi-VN", options);
+  };
+
+  useEffect(() => {
+    const fetchPatientData = async () => {
+      if (!patientId) {
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/patient/data?patientID=${patientId}`,
+          {
+            credentials: "include",
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error fetching patient info:", errorData.message);
+          return;
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setPatient(data);
+      } catch (error) {
+        console.error("Error fetching patient info:", error);
+      }
+    };
+
+    fetchPatientData();
+  }, [patientId]);
 
   if (!patient) {
     return <div>Không tìm thấy bệnh nhân</div>;
@@ -41,7 +61,7 @@ const PatientDetailsModal = ({ patientId, onClose }) => {
           <label className="block text-gray-700">Họ và Tên</label>
           <input
             type="text"
-            value={patient.name}
+            value={patient.fullname}
             readOnly
             className="w-full p-2 border rounded bg-gray-100"
           />
@@ -50,7 +70,7 @@ const PatientDetailsModal = ({ patientId, onClose }) => {
           <label className="block text-gray-700">Giới tính</label>
           <input
             type="text"
-            value={patient.gender}
+            value={patient.gender === "male" ? "Nam" : "Nữ"}
             readOnly
             className="w-full p-2 border rounded bg-gray-100"
           />
@@ -59,7 +79,7 @@ const PatientDetailsModal = ({ patientId, onClose }) => {
           <label className="block text-gray-700">Ngày sinh</label>
           <input
             type="text"
-            value={patient.birthDate}
+            value={formatDate(patient.birthday)}
             readOnly
             className="w-full p-2 border rounded bg-gray-100"
           />
@@ -68,7 +88,7 @@ const PatientDetailsModal = ({ patientId, onClose }) => {
           <label className="block text-gray-700">Số thẻ BHYT</label>
           <input
             type="text"
-            value={patient.healthCardNumber}
+            value={patient.health_card}
             readOnly
             className="w-full p-2 border rounded bg-gray-100"
           />

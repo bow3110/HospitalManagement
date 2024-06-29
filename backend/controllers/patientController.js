@@ -7,6 +7,7 @@ exports.getPatientData = async (req, res) => {
       "SELECT * FROM patient WHERE patient_id = ?",
       [patientId]
     );
+    console.log(rows[0]);
     res.status(200).json(rows[0]);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -28,26 +29,10 @@ exports.getPatientRecords = async (req, res) => {
 
   try {
     const [rows] = await pool.query(
-      "SELECT p.id, p.name, r.id AS record_id, r.date, r.summary, r.image_url FROM patient p JOIN record r ON p.id = r.patient_id WHERE p.id = ?",
+      "SELECT * FROM record WHERE patient_id = ?",
       [patientId]
     );
-
-    if (rows.length === 0) {
-      return res.status(404).json({ message: "Patient not found" });
-    }
-
-    const patient = {
-      id: rows[0].id,
-      name: rows[0].name,
-      record: rows.map((row) => ({
-        id: row.record_id,
-        date: row.date,
-        summary: row.summary,
-        imageUrl: row.image_url,
-      })),
-    };
-
-    res.status(200).json(patient);
+    res.status(200).json(rows);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
