@@ -49,7 +49,7 @@ const Home = () => {
                     30+
                   </h2>
                   <span className="w-[100px] h-2 bg-yellowColor rounded-full block mt-[-14px] "></span>
-                  <p className="text__para">Years of Experience</p>
+                  <p className="text__para">Năm Kinh nghiệm</p>
                 </div>
 
                 <div>
@@ -57,7 +57,7 @@ const Home = () => {
                     15+
                   </h2>
                   <span className="w-[100px] h-2 bg-purpleColor rounded-full block mt-[-14px] "></span>
-                  <p className="text__para">Clinic Location</p>
+                  <p className="text__para">Phòng khám </p>
                 </div>
 
                 <div>
@@ -65,7 +65,7 @@ const Home = () => {
                     100%
                   </h2>
                   <span className="w-[100px] h-2 bg-irisBlueColor rounded-full block mt-[-14px] "></span>
-                  <p className="text__para">Patient Satisfaction</p>
+                  <p className="text__para">Khách hành hài lòng</p>
                 </div>
               </div>
             </div>
@@ -87,11 +87,11 @@ const Home = () => {
         <div className="container">
           <div className="lg:w-[470px] mx-auto ">
             <h2 className="heading text-center">
-              Providing the best medical services
+              Cung cấp dịch vụ y tế tốt nhất cho mọi người
             </h2>
             <p className="text__para text-center">
-              World-class care for everyone. Our health System offers
-              unmatched,expert health care.
+              Chăm sóc hàng đầu thế giới cho mọi người. Hệ thống chăm sóc sức
+              khỏe của chúng tôi cung cấp dịch vụ y tế chuyên nghiệp hàng đầu
             </p>
           </div>
 
@@ -189,9 +189,9 @@ const Home = () => {
             {/* feature content*/}
             <div className="xl:w-[670px] ">
               <h2 className="heading">
-                Get virtual treatment
+                Hỗ trợ tư vấn trực tuyến
                 <br />
-                anytime.
+                24/7.
               </h2>
               <ul className="pl-4">
                 <li className="text__para">1. Lên lịch hẹn trực tiếp.</li>
@@ -204,9 +204,6 @@ const Home = () => {
                   dụng công cụ lập lịch trực tuyến để chọn thời gian Hẹn.
                 </li>
               </ul>
-              <Link to="/">
-                <button className="btn">Learn more</button>
-              </Link>
             </div>
 
             {/* feature img*/}
@@ -216,7 +213,7 @@ const Home = () => {
                 <div className="flex items-center justify-between ">
                   <div className="flex items-center gap-[6px] lg:gap-3 ">
                     <p className="text-[10px] leading-[10px] lg:text-[14px] lg:leading-5 text-headingColor font-[600] ">
-                      Tue, 24
+                      Thứ Ba, 24
                     </p>
                     <p className="text-[10px] leading-[10px] lg:text-[14px] lg:leading-5 text-textColor font-[400] ">
                       10:00AM
@@ -230,7 +227,7 @@ const Home = () => {
                   className="w-[65px] lg:w-[96px] bg-[#CCF0F3] py-1 px-2 lg:py-[6px] lg:px-[10px] text-[8px] leading-[8px] lg:text-[12px] lg:leading-4 text-irisBlueColor font-[500] mt-2 lg:mt-4
                 rounded-full"
                 >
-                  Consultion
+                  Đặt lịch hẹn
                 </div>
                 <div className="flex items-center gap-[6px] lg:gap-[10px] mt-2 lg:mt-[18px] ">
                   <img src={avatarIcon} alt="" />
@@ -249,10 +246,12 @@ const Home = () => {
       <section>
         <div className="container">
           <div className="xl:w-[470px] mx-auto ">
-            <h2 className="heading text-center">Our Great Doctors</h2>
+            <h2 className="heading text-center">
+              Những Bác sĩ hàng đầu của chúng tôi
+            </h2>
             <p className="text__para text-center">
-              World-class care for everyone. Our health System offers
-              unmatched,expert health care
+              Chăm sóc hàng đầu thế giới cho mọi người. Hệ thống chăm sóc sức
+              khỏe của chúng tôi cung cấp dịch vụ y tế chuyên nghiệp hàng đầu
             </p>
           </div>
 
@@ -270,7 +269,7 @@ const Home = () => {
             </div>
             <div className="w-full md:w-1/2">
               <h2 className="heading">
-                Most questions by our beloved patients
+                Các câu hỏi từ bệnh nhân yêu quý của chúng tôi
               </h2>
               <FaqList />
             </div>
